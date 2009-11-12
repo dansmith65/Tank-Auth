@@ -15,7 +15,7 @@ define('STATUS_NOT_ACTIVATED', '0');
  *
  * @package		Tank_auth
  * @author		Ilya Konyukhov (http://konyukhov.com/soft/)
- * @version		1.0.4
+ * @version		1.0.5
  * @based on	DX Auth by Dexcell (http://dexcell.shinsengumiteam.com/dx_auth)
  * @license		MIT License Copyright (c) 2008 Erick Hartanto
  */
@@ -110,6 +110,10 @@ class Tank_auth
 	function logout()
 	{
 		$this->delete_autologin();
+
+		// See http://codeigniter.com/forums/viewreply/662369/ as the reason for the next line
+		$this->ci->session->set_userdata(array('user_id' => '', 'username' => '', 'status' => ''));
+
 		$this->ci->session->sess_destroy();
 	}
 
