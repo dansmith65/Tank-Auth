@@ -6,7 +6,6 @@ class Welcome extends Controller
 	{
 		parent::__construct();
 
-		$this->load->config('tank_auth', TRUE);
 		$this->load->helper('url');
 		$this->load->library('tank_auth');
 	}

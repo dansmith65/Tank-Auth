@@ -6,7 +6,6 @@ class Auth extends Controller
 	{
 		parent::__construct();
 
-		$this->load->config('tank_auth', TRUE);
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
 		$this->load->library('tank_auth');
