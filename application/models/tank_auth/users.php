@@ -27,10 +27,10 @@ class Users extends Model
 	 * @param	bool
 	 * @return	object
 	 */
-	function get_user_by_id($user_id, $activated = NULL)
+	function get_user_by_id($user_id, $activated)
 	{
 		$this->db->where('id', $user_id);
-		if (!is_null($activated)) $this->db->where('activated', $activated ? 1 : 0);
+		$this->db->where('activated', $activated ? 1 : 0);
 
 		$query = $this->db->get(self::TABLE);
 		if ($query->num_rows() == 1) return $query->row();
@@ -44,25 +44,13 @@ class Users extends Model
 	 * @param	bool
 	 * @return	object
 	 */
-	function get_user_by_login($login, $activated = NULL)
+	function get_user_by_login($login)
 	{
 		$this->db->where('LOWER(username)=', strtolower($login));
 		$this->db->or_where('LOWER(email)=', strtolower($login));
 
 		$query = $this->db->get(self::TABLE);
-
-		if ($query->num_rows() == 1) {
-			$row = $query->row();
-			if (is_null($activated)) {
-				return $row;
-			} else {
-				if ($activated) {
-					if ($row->activated == 1) return $row;
-				} else {
-					if ($row->activated == 0) return $row;
-				}
-			}
-		}
+		if ($query->num_rows() == 1) return $query->row();
 		return NULL;
 	}
 
@@ -73,10 +61,9 @@ class Users extends Model
 	 * @param	bool
 	 * @return	object
 	 */
-	function get_user_by_username($username, $activated = NULL)
+	function get_user_by_username($username)
 	{
 		$this->db->where('LOWER(username)=', strtolower($username));
-		if (!is_null($activated)) $this->db->where('activated', $activated ? 1 : 0);
 
 		$query = $this->db->get(self::TABLE);
 		if ($query->num_rows() == 1) return $query->row();
@@ -90,10 +77,9 @@ class Users extends Model
 	 * @param	bool
 	 * @return	object
 	 */
-	function get_user_by_email($email, $activated = NULL)
+	function get_user_by_email($email)
 	{
 		$this->db->where('LOWER(email)=', strtolower($email));
-		if (!is_null($activated)) $this->db->where('activated', $activated ? 1 : 0);
 
 		$query = $this->db->get(self::TABLE);
 		if ($query->num_rows() == 1) return $query->row();
@@ -110,6 +96,7 @@ class Users extends Model
 	{
 		$this->db->select('1', FALSE);
 		$this->db->where('LOWER(username)=', strtolower($username));
+
 		$query = $this->db->get(self::TABLE);
 		return $query->num_rows() == 0;
 	}
@@ -125,6 +112,7 @@ class Users extends Model
 		$this->db->select('1', FALSE);
 		$this->db->where('LOWER(email)=', strtolower($email));
 		$this->db->or_where('LOWER(new_email)=', strtolower($email));
+
 		$query = $this->db->get(self::TABLE);
 		return $query->num_rows() == 0;
 	}
@@ -155,13 +143,18 @@ class Users extends Model
 	 *
 	 * @param	string
 	 * @param	string
+	 * @param	bool
 	 * @return	bool
 	 */
-	function activate_user($user_id, $new_email_key)
+	function activate_user($user_id, $activation_key, $activate_by_email)
 	{
 		$this->db->select('1', FALSE);
 		$this->db->where('id', $user_id);
-		$this->db->where('new_email_key', $new_email_key);
+		if ($activate_by_email) {
+			$this->db->where('new_email_key', $activation_key);
+		} else {
+			$this->db->where('new_password_key', $activation_key);
+		}
 		$this->db->where('activated', 0);
 		$query = $this->db->get(self::TABLE);
 
@@ -222,8 +215,8 @@ class Users extends Model
 		$this->db->set('new_password_key', $new_pass_key);
 		$this->db->set('new_password_requested', date('Y-m-d H:i:s'));
 		$this->db->where('id', $user_id);
-		$this->db->update(self::TABLE);
 
+		$this->db->update(self::TABLE);
 		return $this->db->affected_rows() > 0;
 	}
 
@@ -240,6 +233,7 @@ class Users extends Model
 		$this->db->where('id', $user_id);
 		$this->db->where('new_password_key', $new_pass_key);
 		$this->db->where('UNIX_TIMESTAMP(new_password_requested) >', time() - $expire_period);
+
 		$query = $this->db->get(self::TABLE);
 		return $query->num_rows() == 1;
 	}
@@ -261,8 +255,8 @@ class Users extends Model
 		$this->db->where('id', $user_id);
 		$this->db->where('new_password_key', $new_pass_key);
 		$this->db->where('UNIX_TIMESTAMP(new_password_requested) >=', time() - $expire_period);
-		$this->db->update(self::TABLE);
 
+		$this->db->update(self::TABLE);
 		return $this->db->affected_rows() > 0;
 	}
 
@@ -277,8 +271,8 @@ class Users extends Model
 	{
 		$this->db->set('password', $new_pass);
 		$this->db->where('id', $user_id);
-		$this->db->update(self::TABLE);
 
+		$this->db->update(self::TABLE);
 		return $this->db->affected_rows() > 0;
 	}
 
@@ -297,8 +291,8 @@ class Users extends Model
 		$this->db->set('new_email_key', $new_email_key);
 		$this->db->where('id', $user_id);
 		$this->db->where('activated', $activated ? 1 : 0);
-		$this->db->update(self::TABLE);
 
+		$this->db->update(self::TABLE);
 		return $this->db->affected_rows() > 0;
 	}
 
@@ -316,8 +310,8 @@ class Users extends Model
 		$this->db->set('new_email_key', NULL);
 		$this->db->where('id', $user_id);
 		$this->db->where('new_email_key', $new_email_key);
-		$this->db->update(self::TABLE);
 
+		$this->db->update(self::TABLE);
 		return $this->db->affected_rows() > 0;
 	}
 

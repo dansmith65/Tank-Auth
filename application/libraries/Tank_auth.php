@@ -15,7 +15,7 @@ define('STATUS_NOT_ACTIVATED', '0');
  *
  * @package		Tank_auth
  * @author		Ilya Konyukhov (http://konyukhov.com/soft/)
- * @version		1.0.5
+ * @version		1.0.6
  * @based on	DX Auth by Dexcell (http://dexcell.shinsengumiteam.com/dx_auth)
  * @license		MIT License Copyright (c) 2008 Erick Hartanto
  */
@@ -256,14 +256,15 @@ class Tank_auth
 	 *
 	 * @param	string
 	 * @param	string
+	 * @param	bool
 	 * @return	bool
 	 */
-	function activate_user($user_id, $new_email_key)
+	function activate_user($user_id, $activation_key, $activate_by_email = TRUE)
 	{
 		$this->ci->users->purge_na($this->ci->config->item('email_activation_expire', 'tank_auth'));
 
-		if ((strlen($user_id) > 0) AND (strlen($new_email_key) > 0)) {
-			return $this->ci->users->activate_user($user_id, $new_email_key);
+		if ((strlen($user_id) > 0) AND (strlen($activation_key) > 0)) {
+			return $this->ci->users->activate_user($user_id, $activation_key, $activate_by_email);
 		}
 		return FALSE;
 	}
@@ -279,7 +280,7 @@ class Tank_auth
 	function forgot_password($login)
 	{
 		if (strlen($login) > 0) {
-			if (!is_null($user = $this->ci->users->get_user_by_login($login, TRUE))) {
+			if (!is_null($user = $this->ci->users->get_user_by_login($login))) {
 
 				$data = array(
 					'user_id'		=> $user->id,
@@ -314,7 +315,7 @@ class Tank_auth
 				$this->ci->config->item('forgot_password_expire', 'tank_auth'));
 		}
 		return FALSE;
-}
+	}
 
 	/**
 	 * Replace user password (forgotten) with a new one (set by user)
