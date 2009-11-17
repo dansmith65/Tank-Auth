@@ -8,7 +8,7 @@
  * - TABLE_PROFILE -- user profiles
  *
  * @package	Tank_auth
- * @author	Tank
+ * @author	Ilya Konyukhov (http://konyukhov.com/soft/)
  */
 class Users extends Model
 {
@@ -41,7 +41,6 @@ class Users extends Model
 	 * Get user record by login (username or email)
 	 *
 	 * @param	string
-	 * @param	bool
 	 * @return	object
 	 */
 	function get_user_by_login($login)
@@ -58,7 +57,6 @@ class Users extends Model
 	 * Get user record by username
 	 *
 	 * @param	string
-	 * @param	bool
 	 * @return	object
 	 */
 	function get_user_by_username($username)
@@ -74,7 +72,6 @@ class Users extends Model
 	 * Get user record by email
 	 *
 	 * @param	string
-	 * @param	bool
 	 * @return	object
 	 */
 	function get_user_by_email($email)
@@ -141,7 +138,7 @@ class Users extends Model
 	 * Activate user if activation key is valid.
 	 * Can be called for not activated users only.
 	 *
-	 * @param	string
+	 * @param	int
 	 * @param	string
 	 * @param	bool
 	 * @return	bool
@@ -188,7 +185,6 @@ class Users extends Model
 	 * Delete user record
 	 *
 	 * @param	int
-	 * @param	bool
 	 * @return	bool
 	 */
 	function delete_user($user_id)
@@ -223,8 +219,9 @@ class Users extends Model
 	/**
 	 * Check if given password key is valid and user is authenticated.
 	 *
+	 * @param	int
 	 * @param	string
-	 * @param	string
+	 * @param	int
 	 * @return	void
 	 */
 	function can_reset_password($user_id, $new_pass_key, $expire_period = 900)
@@ -241,7 +238,7 @@ class Users extends Model
 	/**
 	 * Change user password if password key is valid and user is authenticated.
 	 *
-	 * @param	string
+	 * @param	int
 	 * @param	string
 	 * @param	string
 	 * @param	int
@@ -283,6 +280,7 @@ class Users extends Model
 	 * @param	int
 	 * @param	string
 	 * @param	string
+	 * @param	bool
 	 * @return	bool
 	 */
 	function set_new_email($user_id, $new_email, $new_email_key, $activated)
@@ -299,7 +297,7 @@ class Users extends Model
 	/**
 	 * Activate new email (replace old email with new one) if activation key is valid.
 	 *
-	 * @param	string
+	 * @param	int
 	 * @param	string
 	 * @return	bool
 	 */

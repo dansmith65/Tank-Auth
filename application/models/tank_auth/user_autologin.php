@@ -7,7 +7,7 @@
  * for user verification when user claims his autologin passport.
  *
  * @package	Tank_auth
- * @author	Tank
+ * @author	Ilya Konyukhov (http://konyukhov.com/soft/)
  */
 class User_Autologin extends Model
 {
@@ -75,7 +75,6 @@ class User_Autologin extends Model
 	 * Delete all autologin data for given user
 	 *
 	 * @param	int
-	 * @param	string
 	 * @return	void
 	 */
 	function clear($user_id)

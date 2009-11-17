@@ -7,7 +7,7 @@
  * (to protect the site from brute-force attack to user database)
  *
  * @package	Tank_auth
- * @author	Tank
+ * @author	Ilya Konyukhov (http://konyukhov.com/soft/)
  */
 class Login_attempts extends Model
 {
@@ -52,6 +52,8 @@ class Login_attempts extends Model
 	 * Also purge obsolete login attempts (to keep DB clear).
 	 *
 	 * @param	string
+	 * @param	string
+	 * @param	int
 	 * @return	void
 	 */
 	function clear_attempts($ip_address, $login, $expire_period = 86400)
