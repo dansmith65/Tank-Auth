@@ -12,9 +12,9 @@ Your username: <?php echo $username; ?>
 
 Your email address: <?php echo $email; ?>
 
-Your password: <?php echo $password; ?>
+<?php /* Your password: <?php echo $password; ?>
 
-
+*/ ?>
 
 Have fun!
 The <?php echo $site_name; ?> Team

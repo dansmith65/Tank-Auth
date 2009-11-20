@@ -13,10 +13,10 @@ Your username: <?php echo $username; ?>
 <?php } ?>
 
 Your email address: <?php echo $email; ?>
-<?php if (isset($password)) { ?>
+<?php if (isset($password)) { /* ?>
 
 Your password: <?php echo $password; ?>
-<?php } ?>
+<?php */ } ?>
 
 
 

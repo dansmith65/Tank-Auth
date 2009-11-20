@@ -4,7 +4,7 @@
 |--------------------------------------------------------------------------
 | Website details
 |
-| These details are used in emails sent by authorization library.
+| These details are used in emails sent by authentication library.
 |--------------------------------------------------------------------------
 */
 $config['website_name'] = 'Your project';

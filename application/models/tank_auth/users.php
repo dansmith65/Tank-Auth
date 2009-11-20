@@ -3,7 +3,7 @@
 /**
  * Users
  *
- * This model represents user authorization data. It operates the following tables:
+ * This model represents user authentication data. It operates the following tables:
  * - TABLE -- user account data,
  * - TABLE_PROFILE -- user profiles
  *

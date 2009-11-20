@@ -13,7 +13,7 @@ Please, keep it in your records so you don't forget it.<br />
 <br />
 <?php if (strlen($username) > 0) { ?>Your username: <?php echo $username; ?><br /><?php } ?>
 Your email address: <?php echo $email; ?><br />
-Your new password: <?php echo $new_password; ?><br />
+<?php /* Your new password: <?php echo $new_password; ?><br /> */ ?>
 <br />
 <br />
 Thank you,<br />
