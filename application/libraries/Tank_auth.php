@@ -15,7 +15,7 @@ define('STATUS_NOT_ACTIVATED', '0');
  *
  * @package		Tank_auth
  * @author		Ilya Konyukhov (http://konyukhov.com/soft/)
- * @version		1.0.6
+ * @version		1.0.7
  * @based on	DX Auth by Dexcell (http://dexcell.shinsengumiteam.com/dx_auth)
  * @license		MIT License Copyright (c) 2008 Erick Hartanto
  */
@@ -27,10 +27,11 @@ class Tank_auth
 	{
 		$this->ci =& get_instance();
 
+		$this->ci->load->config('tank_auth', TRUE);
+
 		$this->ci->load->library('session');
 		$this->ci->load->database();
 		$this->ci->load->model('tank_auth/users');
-		$this->ci->load->config('tank_auth', TRUE);
 
 		// Try to autologin
 		$this->autologin();
