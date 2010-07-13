@@ -236,7 +236,7 @@ class Tank_auth
 				'username'	=> $user->username,
 				'email'		=> $email,
 			);
-			if ($user->email == $email) {		// leave activation key as is
+			if (strtolower($user->email) == strtolower($email)) {		// leave activation key as is
 				$data['new_email_key'] = $user->new_email_key;
 				return $data;
 
