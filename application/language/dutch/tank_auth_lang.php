@@ -11,8 +11,8 @@ $lang['auth_incorrect_email_or_username'] = 'Ongeldig gebruikersnaam';
 $lang['auth_email_in_use'] = 'Uw e-mailadres bestaat al. Gebruik een ander';
 $lang['auth_username_in_use'] = 'Uw gebruikersnaam bestaat al. Probeer een ander';
 $lang['auth_current_email'] = 'Dit is uw huidige e-mailadres';
-$lang['auth_incorrect_captcha'] = 'Your confirmation code does not match the one in the image.';
-$lang['auth_captcha_expired'] = 'Your confirmation code has expired. Please try again.';
+$lang['auth_incorrect_captcha'] = 'Uw bevestigingscode komt niet overeen met die in de afbeelding.';
+$lang['auth_captcha_expired'] = 'Uw bevestigingscode is verlopen. Probeer het opnieuw.';
 
 // Notifications
 $lang['auth_message_logged_out'] = 'U bent succesvol uitgelogd.';
