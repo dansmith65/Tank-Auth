@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Auth extends Controller
+class Auth extends CI_Controller
 {
 	function __construct()
 	{
@@ -8,13 +8,18 @@ class Auth extends Controller
 
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
+		$this->load->library('security');
 		$this->load->library('tank_auth');
 		$this->lang->load('tank_auth');
 	}
 
 	function index()
 	{
-		redirect('/auth/login/');
+		if ($message = $this->session->flashdata('message')) {
+			$this->load->view('auth/general_message', array('message' => $message));
+		} else {
+			redirect('/auth/login/');
+		}
 	}
 
 	/**
@@ -42,7 +47,7 @@ class Auth extends Controller
 			// Get login for counting attempts to login
 			if ($this->config->item('login_count_attempts', 'tank_auth') AND
 					($login = $this->input->post('login'))) {
-				$login = $this->input->xss_clean($login);
+				$login = $this->security->xss_clean($login);
 			} else {
 				$login = '';
 			}
@@ -69,7 +74,6 @@ class Auth extends Controller
 					$errors = $this->tank_auth->get_error_message();
 					if (isset($errors['banned'])) {								// banned user
 						$this->_show_message($this->lang->line('auth_message_banned').' '.$errors['banned']);
-						return;
 
 					} elseif (isset($errors['not_activated'])) {				// not activated user
 						redirect('/auth/send_again/');
@@ -119,7 +123,6 @@ class Auth extends Controller
 
 		} elseif (!$this->config->item('allow_registration', 'tank_auth')) {	// registration is off
 			$this->_show_message($this->lang->line('auth_message_registration_disabled'));
-			return;
 
 		} else {
 			$use_username = $this->config->item('use_username', 'tank_auth');
@@ -160,7 +163,6 @@ class Auth extends Controller
 						unset($data['password']); // Clear password (just for any case)
 
 						$this->_show_message($this->lang->line('auth_message_registration_completed_1'));
-						return;
 
 					} else {
 						if ($this->config->item('email_account_details', 'tank_auth')) {	// send "welcome" email
@@ -170,7 +172,6 @@ class Auth extends Controller
 						unset($data['password']); // Clear password (just for any case)
 
 						$this->_show_message($this->lang->line('auth_message_registration_completed_2').' '.anchor('/auth/login/', 'Login'));
-						return;
 					}
 				} else {
 					$errors = $this->tank_auth->get_error_message();
@@ -216,7 +217,7 @@ class Auth extends Controller
 					$this->_send_email('activate', $data['email'], $data);
 
 					$this->_show_message(sprintf($this->lang->line('auth_message_activation_email_sent'), $data['email']));
-					return;
+
 				} else {
 					$errors = $this->tank_auth->get_error_message();
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
@@ -276,7 +277,6 @@ class Auth extends Controller
 					$this->_send_email('forgot_password', $data['email'], $data);
 
 					$this->_show_message($this->lang->line('auth_message_new_password_sent'));
-					return;
 
 				} else {
 					$errors = $this->tank_auth->get_error_message();
@@ -315,11 +315,9 @@ class Auth extends Controller
 				$this->_send_email('reset_password', $data['email'], $data);
 
 				$this->_show_message($this->lang->line('auth_message_new_password_activated').' '.anchor('/auth/login/', 'Login'));
-				return;
 
 			} else {														// fail
 				$this->_show_message($this->lang->line('auth_message_new_password_failed'));
-				return;
 			}
 		} else {
 			// Try to activate user by password key (if not activated yet)
@@ -329,7 +327,6 @@ class Auth extends Controller
 
 			if (!$this->tank_auth->can_reset_password($user_id, $new_pass_key)) {
 				$this->_show_message($this->lang->line('auth_message_new_password_failed'));
-				return;
 			}
 		}
 		$this->load->view('auth/reset_password_form', $data);
@@ -357,7 +354,6 @@ class Auth extends Controller
 						$this->form_validation->set_value('old_password'),
 						$this->form_validation->set_value('new_password'))) {	// success
 					$this->_show_message($this->lang->line('auth_message_password_changed'));
-					return;
 
 				} else {														// fail
 					$errors = $this->tank_auth->get_error_message();
@@ -395,7 +391,6 @@ class Auth extends Controller
 					$this->_send_email('change_email', $data['new_email'], $data);
 
 					$this->_show_message(sprintf($this->lang->line('auth_message_new_email_sent'), $data['new_email']));
-					return;
 
 				} else {
 					$errors = $this->tank_auth->get_error_message();
@@ -447,7 +442,6 @@ class Auth extends Controller
 				if ($this->tank_auth->delete_user(
 						$this->form_validation->set_value('password'))) {		// success
 					$this->_show_message($this->lang->line('auth_message_unregistered'));
-					return;
 
 				} else {														// fail
 					$errors = $this->tank_auth->get_error_message();
@@ -466,7 +460,8 @@ class Auth extends Controller
 	 */
 	function _show_message($message)
 	{
-		$this->load->view('auth/general_message', array('message' => $message));
+		$this->session->set_flashdata('message', $message);
+		redirect('/auth/');
 	}
 
 	/**
