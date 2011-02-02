@@ -491,7 +491,7 @@ class Auth extends CI_Controller
 	 */
 	function _create_captcha()
 	{
-		$this->load->plugin('captcha');
+		$this->load->helper('captcha');
 
 		$cap = create_captcha(array(
 			'img_path'		=> './'.$this->config->item('captcha_path', 'tank_auth'),
