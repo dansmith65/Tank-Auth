@@ -12,6 +12,18 @@ $config['webmaster_email'] = 'webmaster@your-site.com';
 
 /*
 |--------------------------------------------------------------------------
+| Security settings
+|
+| The library uses PasswordHash library for operating with hashed passwords.
+| 'phpass_hash_portable' = Can passwords be dumped and exported to another server. If set to FALSE then you won't be able to use this database on another server.
+| 'phpass_hash_strength' = Password hash strength.
+|--------------------------------------------------------------------------
+*/
+$config['phpass_hash_portable'] = FALSE;
+$config['phpass_hash_strength'] = 8;
+
+/*
+|--------------------------------------------------------------------------
 | Registration settings
 |
 | 'allow_registration' = Registration is enabled or not
