@@ -12,7 +12,7 @@
 */
 $config['mailtype'] = 'html';
 $config['charset'] = 'utf-8';
-$config['newline'] = '\r\n';
+$config['newline'] = "\r\n";
 
 
 /* End of file email.php */
