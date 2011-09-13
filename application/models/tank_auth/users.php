@@ -180,6 +180,7 @@ class Users extends CI_Model
 	 */
 	function purge_na($expire_period = 172800)
 	{
+		$this->db->query("SET time_zone='" . date('P') . "'");
 		$this->db->where('activated', 0);
 		$this->db->where('UNIX_TIMESTAMP(created) <', time() - $expire_period);
 		$this->db->delete($this->table_name);
@@ -230,6 +231,7 @@ class Users extends CI_Model
 	 */
 	function can_reset_password($user_id, $new_pass_key, $expire_period = 900)
 	{
+		$this->db->query("SET time_zone='" . date('P') . "'");
 		$this->db->select('1', FALSE);
 		$this->db->where('id', $user_id);
 		$this->db->where('new_password_key', $new_pass_key);
@@ -250,6 +252,7 @@ class Users extends CI_Model
 	 */
 	function reset_password($user_id, $new_pass, $new_pass_key, $expire_period = 900)
 	{
+		$this->db->query("SET time_zone='" . date('P') . "'");
 		$this->db->set('password', $new_pass);
 		$this->db->set('new_password_key', NULL);
 		$this->db->set('new_password_requested', NULL);
