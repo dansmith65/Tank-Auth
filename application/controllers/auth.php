@@ -321,7 +321,9 @@ class Auth extends CI_Controller
 			}
 		} else {
 			// Try to activate user by password key (if not activated yet)
-			if ($this->config->item('email_activation', 'tank_auth')) {
+			if ($this->config->item(
+					'email_activation', 'tank_auth',
+					$this->config->item('forgot_password_expire', 'tank_auth'))) {
 				$this->tank_auth->activate_user($user_id, $new_pass_key, FALSE);
 			}
 
